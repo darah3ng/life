@@ -49,7 +49,11 @@ function App() {
               </span>
             </div>
           </div>
-          <LifeGrid config={config} />
+          
+          <LifeGrid 
+            key={`${config.currentAge}-${config.isZoomedOut}`}
+            config={config}
+          />
         </div>
 
         <div className="text-center text-sm text-gray-500">

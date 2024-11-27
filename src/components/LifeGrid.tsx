@@ -28,7 +28,7 @@ export const LifeGrid: React.FC<LifeGridProps> = ({ config }) => {
         itemSize={16}
         columns={52}
         renderItem={renderDot}
-        height={config.isZoomedOut ? 'auto' : 600}
+        height={config.isZoomedOut ? 1650 : 600}
       />
     </div>
   );
