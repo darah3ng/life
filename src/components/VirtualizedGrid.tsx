@@ -33,7 +33,12 @@ export const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({
   const rowVirtualizer = useVirtualizer({
     count: rows,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => itemSize,
+    estimateSize: (index) => {
+      const baseSize = itemSize;
+      // Add extra padding for every 10th row
+      const extraPadding = ((index + 1) % 10 === 0 ? 20 : 0);
+      return baseSize + extraPadding;
+    },
     overscan: 5,
   });
 
@@ -53,31 +58,35 @@ export const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({
           position: 'relative',
         }}
       >
-        {rowVirtualizer.getVirtualItems().map((virtualRow) => (
-          <div
-            key={virtualRow.index}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: `${itemSize}px`,
-              transform: `translateY(${virtualRow.start}px)`,
-            }}
-            className="grid grid-cols-52 gap-1"
-          >
-            {Array.from({ length: columns }).map((_, col) => {
-              const itemIndex = virtualRow.index * columns + col;
-              if (itemIndex >= totalItems) return null;
-              return (
-                <div key={col} className="flex items-center justify-center">
-                  {renderItem(itemIndex)}
-                </div>
-              );
-            })}
-          </div>
-        ))}
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const isLastInDecade = (virtualRow.index + 1) % 10 === 0;
+          return (
+            <div
+              key={virtualRow.index}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: `${itemSize}px`,
+                transform: `translateY(${virtualRow.start}px)`,
+                marginBottom: isLastInDecade ? '20px' : '0',
+              }}
+              className="grid grid-cols-52 gap-1"
+            >
+              {Array.from({ length: columns }).map((_, col) => {
+                const itemIndex = virtualRow.index * columns + col;
+                if (itemIndex >= totalItems) return null;
+                return (
+                  <div key={col} className="flex items-center justify-center">
+                    {renderItem(itemIndex)}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </motion.div>
   );
-};
+}
