@@ -25,7 +25,7 @@ export const LifeGrid: React.FC<LifeGridProps> = ({ config }) => {
     <div className="w-full">
       <VirtualizedGrid
         totalItems={totalWeeks}
-        itemSize={config.isZoomedOut ? 12 : 16}
+        itemSize={16}
         columns={52}
         renderItem={renderDot}
         height={config.isZoomedOut ? 'auto' : 600}
